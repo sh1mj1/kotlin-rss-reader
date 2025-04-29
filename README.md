@@ -27,11 +27,11 @@ FeedSource
 - [ ] 피드 URL에서 XML 데이터를 읽어온다. (fetchXml())
 - [ ] XML 파싱을 통해 게시물 리스트를 만든다. (parseXml())
 
-ArticleHeader
+Article
 
-- [ ] 기술 블로그의 글 정보를 저장한다.
-- [ ] 제목, 링크, 작성 날짜 등
-- [ ] Comparable을 구현하여 날짜 기준 정렬이 가능해야 한다.
+- [x] 기술 블로그의 글 정보를 저장한다.
+- [x] 제목, 링크, 작성 날짜, 설명
+- [x] Comparable을 구현하여 날짜 기준으로 내림차순 정렬, 제목 기준으로 오름차순 정렬
 
 FeedAggregator
 
