@@ -23,9 +23,8 @@
 
 FeedSource
 
-- [ ] RSS 피드 URL을 저장한다.
-- [ ] 피드 URL에서 XML 데이터를 읽어온다. (fetchXml())
-- [ ] XML 파싱을 통해 게시물 리스트를 만든다. (parseXml())
+- [x] RSS 피드 URL을 저장한다.
+- [x] 피드 URL에서 Document 데이터를 읽어온다. (fetchedDocument)
 
 Article
 
