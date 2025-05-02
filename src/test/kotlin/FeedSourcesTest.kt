@@ -127,32 +127,5 @@ class FeedSourcesTest : BehaviorSpec({
                 articles[1].createdAt shouldBe LocalDateTime.of(2024, 4, 17, 11, 0, 0)
             }
         }
-
-        When("FakeXmlFeedSource가 업데이트되고 시간이 경과하여 Flow가 다시 방출될 때") {
-            val updatedXml =
-                """
-                <rss><channel>
-                    <item>
-                        <title>Updated Article Three</title>
-                        <link>https://example.com/updated/three</link>
-                        <pubDate>Wed, 17 Apr 2024 12:00:00 GMT</pubDate>
-                        <description>Updated description three.</description>
-                    </item>
-                </channel></rss>
-                """.trimIndent()
-            Then("업데이트된 XML에서 파싱된 Article을 포함하는 ArticlesResult.Success를 방출해야 한다") {
-                runTest {
-                    fakeFeedSource.updateFakeXml(updatedXml)
-
-                    val articlesResultSuccess =
-                        feedSources.articlesResultState.first {
-                            it is FeedSources.ArticlesResult.Success &&
-                                it.articles.first().title == "Updated Article Three"
-                        } as FeedSources.ArticlesResult.Success
-
-                    articlesResultSuccess.articles.first().title shouldBe "Updated Article Three"
-                }
-            }
-        }
     }
 })

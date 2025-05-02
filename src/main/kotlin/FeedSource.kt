@@ -1,5 +1,6 @@
 import org.w3c.dom.Document
 import org.w3c.dom.Element
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import javax.xml.parsers.DocumentBuilderFactory
 
@@ -25,7 +26,7 @@ fun Document.parsedArticles(dateTimeFormatter: DateTimeFormatter): List<Article>
         val link = item.getElementsByTagName("link").item(0).textContent
         val pubDate = item.getElementsByTagName("pubDate").item(0).textContent
         val publishedDate =
-            java.time.ZonedDateTime.parse(pubDate, dateTimeFormatter).toLocalDateTime()
+            ZonedDateTime.parse(pubDate, dateTimeFormatter).toLocalDateTime()
         val description = item.getElementsByTagName("description").item(0)?.textContent ?: ""
 
         Article(title, link, publishedDate, description)
