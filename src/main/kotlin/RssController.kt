@@ -1,33 +1,31 @@
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class RssController(
     val feedSources: FeedSources,
 ) {
-    fun run() =
-        runBlocking {
-            feedSources.articlesResultState.collectLatest { articlesResult ->
-                when (articlesResult) {
-                    is FeedSources.ArticlesResult.Loading -> {
-                        showLoading()
-                    }
+    suspend fun run() {
+        feedSources.articlesResultState.collectLatest { articlesResult ->
+            when (articlesResult) {
+                is FeedSources.ArticlesResult.Loading -> {
+                    withContext(Dispatchers.IO) { { showLoading() } }
+                }
 
-                    is FeedSources.ArticlesResult.Success -> {
-                        val keyword = withContext(Dispatchers.IO) { readUpdatedKeyword() }
+                is FeedSources.ArticlesResult.Success -> {
+                    val keyword = withContext(Dispatchers.IO) { readUpdatedKeyword() }
 
-                        showArticles(articlesResult, keyword)
-                    }
+                    showArticles(articlesResult, keyword)
+                }
 
-                    is FeedSources.ArticlesResult.Failure -> {
-                        showErrorMessage(articlesResult)
-                    }
+                is FeedSources.ArticlesResult.Failure -> {
+                    withContext(Dispatchers.IO) { showErrorMessage(articlesResult) }
                 }
             }
         }
+    }
 
-    private fun showArticles(
+    private suspend fun showArticles(
         articlesResult: FeedSources.ArticlesResult.Success,
         keyword: String,
     ) {
@@ -37,7 +35,9 @@ class RssController(
             articles
                 .sorted()
                 .take(10)
-                .let(::showArticles)
+                .let {
+                    withContext(Dispatchers.IO) { showArticles(articles) }
+                }
         } else {
             articles
                 .filter { article ->
@@ -45,7 +45,9 @@ class RssController(
                 }
                 .sorted()
                 .take(10)
-                .let(::showArticles)
+                .let {
+                    withContext(Dispatchers.IO) { showArticles(articles) }
+                }
         }
     }
 
